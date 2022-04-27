@@ -1,0 +1,123 @@
+{% extends 'home.html' %}
+{% load static %}
+{% block title %} Profile {% endblock title %}
+{% block maincontent %}
+<div class="container">
+    <div class="row justify-content-center">
+      <div class="col col-lg-8 justify-content-center">
+        <form method="post">
+            {% csrf_token %}
+            <h1 align="center"> BMI Profile </h1>
+            <hr />
+            {% if messages %}
+              {% for message in messages %}
+              <div class="container-fluid p-0">
+                <div class="alert {{ message.tags }} alert-dismissible" role="alert" >
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true"> × </span>
+                  </button>
+                  {{ message }}
+                </div>
+              </div>
+              {% endfor %}
+            {% endif %}
+            <table>
+              <tr>
+                <td align="right"> <h5> Full Name </h5>  </td> 
+                <td align="center"> 
+                  <h5> {{profile.name}}  </h5>
+                </td> 
+              </tr>
+              <tr>
+                <td align="right"> <h5> Gender  </h5> </td> 
+                <td align="center"> 
+                  <h5> {{profile.gender}}  </h5>
+                </td> 
+              </tr>
+              <tr>
+                <td align="right"> <h5> Height </h5> </td> 
+                <td align="center"> 
+                  <h5> {{profile.height}}  </h5>
+                </td> 
+              </tr>
+              <tr>
+                <td align="right"> <h5> Weight </h5> </td> 
+                <td align="center"> 
+                  <h5> {{profile.weight}}  </h5>
+                </td> 
+              </tr>
+              <tr>
+                <td align="right"> <h5> BMI </h5> </td> 
+                <td align="center"> 
+                  <h5> {{profile.bmi}}  </h5>
+                </td> 
+              </tr>
+              <tr>
+                <td align="right"> <h5> Last BMI Date </h5> </td> 
+                <td align="center"> 
+                  <h5> {{ profile.bmi_calculated_at }}</h5>
+                </td> 
+              </tr>
+            </table>
+            <table>
+              <tr>
+                <td align="right"> <h5> Full Name </h5>  </td> 
+                <td align="left"> 
+                  <input class="m-2 form-control" type="text" name="name" required />  
+                </td> 
+              </tr>
+              <tr>
+                <td align="right"> <h5> Gender  </h5> </td> 
+                <td align="left"> 
+                  <select class="form-control" name="gender" required>
+                    <option value="{{profile.gender}}"> {{profile.gender}} </option>
+                    <option value="Male"> Male </option>
+                    <option value="Female"> Female </option>
+                    <option value="Other"> Other </option>
+                  </select>
+                </td> 
+              </tr>
+              <tr>
+                <td align="right"> <h5> Height </h5> (in Meters) </td> 
+                <td align="left"> 
+                  <input class="m-2 form-control" type="number" id="ht" onchange=calbmi() name="height" step=0.01 required /> 
+                </td> 
+              </tr>
+              <tr>
+                <td align="right"> <h5> Weight </h5> (in Kg) </td> 
+                <td align="left"> 
+                  <input class="m-2 form-control" type="number" id="wt" onchange=calbmi() name="weight" required /> 
+                </td> 
+              </tr>
+              <tr>
+                <td align="right"> <h5> BMI </h5> </td> 
+                <td align="left"> 
+                  <input class="m-2 form-control" type="number" id="bmi" step=0.01  name="bmi" required /> 
+                </td> 
+              </tr>
+              <tr>
+                <td align="right"> <h5> Last BMI Date </h5> </td> 
+                <td align="left"> 
+                  <input class="m-2 form-control" type="date" id="bmi_date" name="bmi_calculated_at" required /> 
+                </td> 
+              </tr>
+            </table>
+            <button class="m-2 btn btn-success"> Update Profile </button>
+        </form>
+    </div>
+  </div>
+{% endblock maincontent %}
+{% block scripts %} 
+<script type="text/javascript">
+  function calbmi() {
+    var height = document.getElementById('ht').value;
+    var weight = document.getElementById('wt').value;
+    var bmi = document.getElementById('bmi');
+    var bmi_date = document.getElementById('bmi_date');
+    bmi.value = parseFloat(weight/(height*height)).toFixed(2);
+    const today = new Date();
+    console.log(today);
+    bmi_date.value = today;
+};
+</script>
+{% endblock scripts %}
